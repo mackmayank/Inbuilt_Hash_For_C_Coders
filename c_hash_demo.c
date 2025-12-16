@@ -5,6 +5,8 @@
 #include<time.h>
 
 #define SIZE 100
+#define STR_SIZE 8
+#define MAX_RANGE 10000
 
 /*
  *  Generating SIZE number of random numbers
@@ -21,14 +23,21 @@ int main()
 	ENTRY itemsToSearch;
 	ENTRY *isFound = NULL;
 	int n = SIZE;
+	/*
+	 * Keep track of allocated memory 
+	 */
+	char *key_list[SIZE];
+	char *data_list[SIZE];
+	int key_index = 0;
+	int data_index = 0;
 
 	// Init hash table
 	printf("hcreate %d\n",hcreate(SIZE));
 
 	while(--n){
-		itemsToStore.data = (char*) calloc(8,sizeof(char));
-		itemsToStore.key = (char*) calloc(8,sizeof(char));
-		int num = rand()%10000;
+		itemsToStore.data = (char*) calloc(STR_SIZE,sizeof(char));
+		itemsToStore.key = (char*) calloc(STR_SIZE,sizeof(char));
+		int num = rand()%MAX_RANGE;
 		sprintf(itemsToStore.data,"%d",num);
 		sprintf(itemsToStore.key,"%d",num);
 		
@@ -37,10 +46,12 @@ int main()
 	
 		//printf("Enter: %x\n",hsearch(itemsToStore, ENTER));
 		printf("Inserted %s\n",itemsToStore);
+		key_list[key_index++] = itemsToStore.key;
+		data_list[data_index++] = itemsToStore.data;
 	}
 	itemsToSearch.key = (char*) calloc(8,sizeof(char));
 	while(1){
-		int num = rand()%10000;
+		int num = rand()%MAX_RANGE;
 		sprintf(itemsToSearch.key,"%d",num);
 		isFound = hsearch(itemsToSearch,FIND);
 		if(isFound != NULL){
@@ -54,5 +65,11 @@ int main()
 
 	// Delete Hash Table
 	hdestroy();
+	// Free allocated memory
+	while(--data_index && --key_index){
+		free(key_list[key_index]);
+		free(data_list[data_index]);
+	}
+	
 	return 0;
 }
