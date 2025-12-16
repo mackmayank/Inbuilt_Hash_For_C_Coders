@@ -45,7 +45,7 @@ int main()
 		hsearch(itemsToStore,ENTER);
 	
 		//printf("Enter: %x\n",hsearch(itemsToStore, ENTER));
-		printf("Inserted %s\n",itemsToStore);
+		printf("Inserted %s\n",(char*)itemsToStore.data);
 		key_list[key_index++] = itemsToStore.key;
 		data_list[data_index++] = itemsToStore.data;
 	}
